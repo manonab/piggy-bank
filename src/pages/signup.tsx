@@ -3,7 +3,7 @@ import { useSignUp } from "../hooks/use-sign-up";
 import AuthForm from '@/src/common/form'
 
 export default function Signup() {
-  const { signup } = useSignUp();
+  const { authSignUp } = useSignUp();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [name, setName] = useState<string>("");
@@ -19,7 +19,7 @@ export default function Signup() {
         setError("Please fill in all the required values");
         return;
       }
-      const resp = await signup({ email, password, name, last_name });
+      const resp = authSignUp({ email, password, name, last_name });
       console.log("After signup");
       console.log(resp);
     } catch (err) {

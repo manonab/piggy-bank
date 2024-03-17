@@ -1,33 +1,31 @@
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { apiAuth } from "../api";
 import { fetcher } from "../helpers/fetcher";
-import { AuthPayload, SignUpParams } from "../models/auth";
+import { AuthPayload, SignUpParams, SignUpType } from "../models/auth";
+import { useApiMutation } from "../utils";
 
-interface SignUpResult {
-  error: string | null;
-  isLoading: boolean;
-  signup: (params: SignUpParams) => Promise<AuthPayload | undefined>;
-}
 
-export const useSignUp = (): SignUpResult => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const signup = async (params: SignUpParams): Promise<AuthPayload | undefined> => {
-    setIsLoading(true);
-    try {
-      const response = await fetcher('http://localhost:3003/api/auth/signup', {
-        method: 'POST',
-        data: params,
-      });
-      console.log('API Response from signIn:', response);
-      return response;
-
-    } catch (error) {
-      console.error('Error in signIn:', error);
-      throw error;
-    }
+export const useSignUp = () => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
+  const mutation = useApiMutation("/api/auth/signup", {
+    onSuccess: (data: string) => {
+      console.log(data)
+      setLoading(false);
+      router.push("/");
+    },
+    onError: (error: unknown) => {
+      setLoading(false);
+      console.log(error);
+    },
+  },
+    ["signup"],
+    "POST"
+  )
+  return {
+    authSignUp: mutation.mutate,
+    authLoading: loading,
+    setAuthLoading: setLoading,
   };
-
-  return { error, isLoading, signup };
 };

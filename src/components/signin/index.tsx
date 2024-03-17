@@ -1,9 +1,9 @@
 import AuthForm from '@/src/common/form'
-import { useSignIn } from '@/src/hooks/use-sign-in';
+import { useSignInMutation } from '@/src/hooks/use-sign-in';
 import React, { useState } from 'react'
 
 export const SignIn: React.FC = () => {
-  const { signIn } = useSignIn();
+  const { authMutate } = useSignInMutation();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
@@ -11,15 +11,13 @@ export const SignIn: React.FC = () => {
 
   const handleAuthentification = async () => {
     try {
-      console.log("Before signIn");
       setError("");
       if (!email || !password) {
         setError("Please fill in all the required values");
         return;
       }
-      const resp = await signIn({ email, password });
-      console.log("After signIn");
-      console.log(resp);
+      const resp = await authMutate({ email, password });
+      return resp;
     } catch (err) {
       console.error("Error during login:", err);
     }

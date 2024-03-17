@@ -135,7 +135,7 @@ const Form: React.FC<Props> = ({
             <div className="flex mx-auto py-5 mb-10">
               <p className="px-2 font-baumans">Tu as déjà un compte?</p>
               <span
-                onClick={() => router.push("/account")}
+                onClick={() => router.push("/")}
                 className="hover:cursor-pointer"
               >
                 <p className="font-baumans font-bold">Connecte-toi!</p>
